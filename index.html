@@ -3,159 +3,681 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Attendance System</title>
+    <title>SR University - Student Attendance Portal</title>
     <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #1e40af;
+            --secondary: #0d9488;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --present: #16a34a;
+            --present-bg: #dcfce7;
+            --absent: #dc2626;
+            --absent-bg: #fee2e2;
+            --border: #e2e8f0;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
+
         body {
-            background-color: #f4f6f9;
-            color: #333;
-            padding: 30px 15px;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        .container {
-            max-width: 750px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
+
+        /* Top Brand Header */
         header {
-            background: #1e3a8a;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
             color: #ffffff;
-            padding: 24px;
+            padding: 24px 20px;
             text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
         header h1 {
-            font-size: 1.6rem;
-            margin-bottom: 6px;
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
             font-weight: 700;
         }
+
         header p {
             font-size: 0.95rem;
-            opacity: 0.9;
+            color: #cbd5e1;
+            margin-top: 4px;
         }
-        .content {
-            padding: 24px;
-        }
-        .meta-info {
+
+        /* Role Switcher Nav */
+        .role-nav-container {
+            max-width: 900px;
+            margin: -20px auto 20px;
+            padding: 0 20px;
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 0.9rem;
-            color: #4b5563;
+            justify-content: center;
         }
+
+        .role-nav {
+            display: inline-flex;
+            background: #ffffff;
+            border-radius: 9999px;
+            padding: 6px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            border: none;
+            outline: none;
+            padding: 10px 24px;
+            border-radius: 9999px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(30, 58, 138, 0.35);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Stats Bar */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-val.present-stat { color: var(--present); }
+        .stat-val.absent-stat { color: var(--absent); }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+
+        /* Controls & Quick Actions */
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .date-badge {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            background: #f1f5f9;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-save:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
         }
+
         th, td {
+            padding: 12px 14px;
             text-align: left;
-            padding: 12px 16px;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.92rem;
         }
+
         th {
-            background-color: #f9fafb;
+            background: #f8fafc;
+            color: #475569;
             font-weight: 600;
-            color: #374151;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             letter-spacing: 0.05em;
         }
-        tr:hover {
+
+        tr:hover td {
             background-color: #f8fafc;
         }
-        .status-badge {
+
+        /* Teacher Attendance Toggle Buttons */
+        .toggle-group {
+            display: inline-flex;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8fafc;
+        }
+
+        .toggle-btn {
+            border: none;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-muted);
+            transition: all 0.15s ease;
+        }
+
+        .toggle-btn.btn-p.active {
+            background: var(--present);
+            color: #ffffff;
+        }
+
+        .toggle-btn.btn-a.active {
+            background: var(--absent);
+            color: #ffffff;
+        }
+
+        /* Student View Styles */
+        .student-search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .student-result-card {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .student-result-card.active {
+            display: block;
+        }
+
+        .student-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .badge {
             display: inline-block;
             padding: 4px 12px;
             border-radius: 9999px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
             text-align: center;
-            min-width: 40px;
         }
-        .status-present {
-            background-color: #dcfce7;
-            color: #15803d;
+
+        .badge-present {
+            background-color: var(--present-bg);
+            color: var(--present);
         }
-        .status-absent {
-            background-color: #fee2e2;
-            color: #b91c1c;
+
+        .badge-absent {
+            background-color: var(--absent-bg);
+            color: var(--absent);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0f172a;
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 0.9rem;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>SR University</h1>
-            <p>Department of Computer Science & Engineering | Daily Attendance</p>
-        </header>
 
-        <div class="content">
-            <div class="meta-info">
-                <span><strong>Date:</strong> November 19, 2026</span>
-                <span><strong>Semester:</strong> V - Section A</span>
-            </div>
+    <header>
+        <h1>SR University</h1>
+        <p>Department of Computer Science & Engineering | Attendance System</p>
+    </header>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Roll No</th>
-                        <th>Student Name</th>
-                        <th style="text-align: center;">Attendance (P/A)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>CS202601</td>
-                        <td>Aarav Sharma</td>
-                        <td style="text-align: center;"><span class="status-badge status-present">P</span></td>
-                    </tr>
-                    <tr>
-                        <td>CS202602</td>
-                        <td>Aditi Verma</td>
-                        <td style="text-align: center;"><span class="status-badge status-present">P</span></td>
-                    </tr>
-                    <tr>
-                        <td>CS202603</td>
-                        <td>Bhavya Patel</td>
-                        <td style="text-align: center;"><span class="status-badge status-absent">A</span></td>
-                    </tr>
-                    <tr>
-                        <td>CS202604</td>
-                        <td>Chirag Rao</td>
-                        <td style="text-align: center;"><span class="status-badge status-present">P</span></td>
-                    </tr>
-                    <tr>
-                        <td>CS202605</td>
-                        <td>Deepika Reddy</td>
-                        <td style="text-align: center;"><span class="status-badge status-present">P</span></td>
-                    </tr>
-                    <tr>
-                        <td>CS202606</td>
-                        <td>Ishaan Nair</td>
-                        <td style="text-align: center;"><span class="status-badge status-absent">A</span></td>
-                    </tr>
-                    <tr>
-                        <td>CS202607</td>
-                        <td>Kavya Iyer</td>
-                        <td style="text-align: center;"><span class="status-badge status-present">P</span></td>
-                    </tr>
-                    <tr>
-                        <td>CS202608</td>
-                        <td>Manish Gupta</td>
-                        <td style="text-align: center;"><span class="status-badge status-present">P</span></td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- Role Switcher -->
+    <div class="role-nav-container">
+        <div class="role-nav">
+            <button class="tab-btn active" onclick="switchPortal('teacher')">
+                <span>👩‍🏫 Teacher Portal (Mark)</span>
+            </button>
+            <button class="tab-btn" onclick="switchPortal('student')">
+                <span>🎓 Student Portal (View)</span>
+            </button>
         </div>
     </div>
+
+    <div class="main-container">
+
+        <!-- ================= TEACHER VIEW ================= -->
+        <div id="teacher-view" class="tab-content active">
+            <div class="card">
+                <div class="section-title">
+                    <span>Daily Attendance Sheet</span>
+                    <span class="date-badge" id="current-date-badge"></span>
+                </div>
+
+                <!-- Live Statistics -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-val" id="total-students-count">0</div>
+                        <div class="stat-label">Total Students</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-val present-stat" id="total-present-count">0</div>
+                        <div class="stat-label">Present (P)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-val absent-stat" id="total-absent-count">0</div>
+                        <div class="stat-label">Absent (A)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-val" id="attendance-rate">0%</div>
+                        <div class="stat-label">Turnout Rate</div>
+                    </div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="controls-row">
+                    <div class="btn-group">
+                        <button class="btn btn-outline" onclick="markAll('P')">✓ Mark All Present</button>
+                        <button class="btn btn-outline" onclick="markAll('A')">✕ Mark All Absent</button>
+                    </div>
+                    <button class="btn btn-save" onclick="saveAttendance()">💾 Save & Publish Attendance</button>
+                </div>
+
+                <!-- Teacher Table -->
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Student Name</th>
+                                <th style="text-align: center;">Mark Attendance (P/A)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacher-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= STUDENT VIEW ================= -->
+        <div id="student-view" class="tab-content">
+            <div class="card">
+                <div class="section-title">
+                    <span>Student Attendance Check</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+                    Search your Roll Number or Name to inspect your attendance status.
+                </p>
+
+                <!-- Student Search Bar -->
+                <div class="student-search-box">
+                    <input 
+                        type="text" 
+                        id="student-search-input" 
+                        class="search-input" 
+                        placeholder="Enter Roll Number (e.g., CS202601) or Name..." 
+                        oninput="searchStudent()"
+                    />
+                </div>
+
+                <!-- Individual Student Result View -->
+                <div id="student-card-result" class="student-result-card">
+                    <div class="student-result-header">
+                        <div>
+                            <h3 id="res-student-name" style="font-size: 1.2rem; color: var(--primary);"></h3>
+                            <span id="res-student-roll" style="color: var(--text-muted); font-size: 0.9rem;"></span>
+                        </div>
+                        <div id="res-student-status"></div>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #475569;" id="res-student-message"></p>
+                </div>
+
+                <!-- Read-Only Complete Class Table for Students -->
+                <div class="section-title" style="margin-top: 24px; font-size: 1.1rem;">
+                    <span>Class Attendance List</span>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Student Name</th>
+                                <th style="text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">Attendance saved successfully!</div>
+
+    <script>
+        // Initial Dataset
+        const DEFAULT_STUDENTS = [
+            { roll: 'CS202601', name: 'Aarav Sharma', status: 'P' },
+            { roll: 'CS202602', name: 'Aditi Verma', status: 'P' },
+            { roll: 'CS202603', name: 'Bhavya Patel', status: 'A' },
+            { roll: 'CS202604', name: 'Chirag Rao', status: 'P' },
+            { roll: 'CS202605', name: 'Deepika Reddy', status: 'P' },
+            { roll: 'CS202606', name: 'Ishaan Nair', status: 'A' },
+            { roll: 'CS202607', name: 'Kavya Iyer', status: 'P' },
+            { roll: 'CS202608', name: 'Manish Gupta', status: 'P' }
+        ];
+
+        const STORAGE_KEY = 'sr_university_attendance';
+
+        // Load or initialize students
+        function getStudents() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : DEFAULT_STUDENTS;
+        }
+
+        let students = getStudents();
+
+        // Initialize UI on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const dateStr = new Date().toLocaleDateString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+            document.getElementById('current-date-badge').textContent = 'Date: ' + dateStr;
+            renderTeacherTable();
+            renderStudentTable();
+            updateStatistics();
+        });
+
+        // Switch Portals
+        function switchPortal(portal) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            if (portal === 'teacher') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('teacher-view').classList.add('active');
+                renderTeacherTable();
+            } else {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('student-view').classList.add('active');
+                renderStudentTable();
+            }
+        }
+
+        // Render Teacher Editable Table
+        function renderTeacherTable() {
+            const tbody = document.getElementById('teacher-table-body');
+            tbody.innerHTML = '';
+
+            students.forEach((s, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${s.roll}</strong></td>
+                    <td>${s.name}</td>
+                    <td style="text-align: center;">
+                        <div class="toggle-group">
+                            <button class="toggle-btn btn-p ${s.status === 'P' ? 'active' : ''}" onclick="setStatus(${idx}, 'P')">P</button>
+                            <button class="toggle-btn btn-a ${s.status === 'A' ? 'active' : ''}" onclick="setStatus(${idx}, 'A')">A</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            updateStatistics();
+        }
+
+        // Render Student Read-Only Table
+        function renderStudentTable(filterQuery = '') {
+            const tbody = document.getElementById('student-table-body');
+            tbody.innerHTML = '';
+
+            const filtered = students.filter(s => 
+                s.roll.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                s.name.toLowerCase().includes(filterQuery.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted);">No student matches your search.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${s.roll}</strong></td>
+                    <td>${s.name}</td>
+                    <td style="text-align: center;">
+                        <span class="badge ${s.status === 'P' ? 'badge-present' : 'badge-absent'}">
+                            ${s.status === 'P' ? 'Present (P)' : 'Absent (A)'}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Set attendance for an individual student
+        function setStatus(index, status) {
+            students[index].status = status;
+            renderTeacherTable();
+        }
+
+        // Mark all Present or Absent
+        function markAll(status) {
+            students.forEach(s => s.status = status);
+            renderTeacherTable();
+            showToast(`Marked all as ${status === 'P' ? 'Present' : 'Absent'}`);
+        }
+
+        // Save Attendance to LocalStorage
+        function saveAttendance() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+            renderStudentTable();
+            showToast('Attendance recorded and published successfully!');
+        }
+
+        // Update Statistics
+        function updateStatistics() {
+            const total = students.length;
+            const present = students.filter(s => s.status === 'P').length;
+            const absent = total - present;
+            const percentage = total > 0 ? Math.round((present / total) * 100) : 0;
+
+            document.getElementById('total-students-count').textContent = total;
+            document.getElementById('total-present-count').textContent = present;
+            document.getElementById('total-absent-count').textContent = absent;
+            document.getElementById('attendance-rate').textContent = percentage + '%';
+        }
+
+        // Search Student Feature for the Student Portal
+        function searchStudent() {
+            const query = document.getElementById('student-search-input').value.trim();
+            const resultCard = document.getElementById('student-card-result');
+
+            renderStudentTable(query);
+
+            if (!query) {
+                resultCard.classList.remove('active');
+                return;
+            }
+
+            const match = students.find(s => 
+                s.roll.toLowerCase() === query.toLowerCase() ||
+                s.name.toLowerCase() === query.toLowerCase()
+            );
+
+            if (match) {
+                resultCard.classList.add('active');
+                document.getElementById('res-student-name').textContent = match.name;
+                document.getElementById('res-student-roll').textContent = 'Roll No: ' + match.roll;
+                
+                const isPresent = match.status === 'P';
+                document.getElementById('res-student-status').innerHTML = `
+                    <span class="badge ${isPresent ? 'badge-present' : 'badge-absent'}" style="font-size: 1rem; padding: 6px 16px;">
+                        ${isPresent ? 'Present (P)' : 'Absent (A)'}
+                    </span>
+                `;
+                document.getElementById('res-student-message').textContent = isPresent
+                    ? 'Status: Marked present for today\'s session.'
+                    : 'Status: Marked absent for today\'s session. Please consult your course instructor if needed.';
+            } else {
+                resultCard.classList.remove('active');
+            }
+        }
+
+        // Toast feedback
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+    </script>
 </body>
 </html>
