@@ -3,214 +3,411 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR University - Student Attendance Portal</title>
+    <title>SR University | Smart Attendance Portal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #1e3a8a;
-            --primary-hover: #1e40af;
-            --secondary: #0d9488;
-            --bg-color: #f1f5f9;
-            --card-bg: #ffffff;
-            --text-dark: #1e293b;
+            --primary-light: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            --accent: #0284c7;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --present: #16a34a;
-            --present-bg: #dcfce7;
-            --absent: #dc2626;
-            --absent-bg: #fee2e2;
             --border: #e2e8f0;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
+            background-color: var(--bg);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Top Brand Header */
-        header {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-            color: #ffffff;
-            padding: 24px 20px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            font-size: 1.8rem;
-            letter-spacing: -0.5px;
-            font-weight: 700;
-        }
-
-        header p {
-            font-size: 0.95rem;
-            color: #cbd5e1;
-            margin-top: 4px;
-        }
-
-        /* Role Switcher Nav */
-        .role-nav-container {
-            max-width: 900px;
-            margin: -20px auto 20px;
-            padding: 0 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .role-nav {
-            display: inline-flex;
+        /* Top Navigation Bar */
+        .navbar {
             background: #ffffff;
-            border-radius: 9999px;
-            padding: 6px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-            border: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
         }
 
-        .tab-btn {
-            border: none;
-            outline: none;
-            padding: 10px 24px;
-            border-radius: 9999px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--text-muted);
-            background: transparent;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .tab-btn.active {
-            background: var(--primary);
-            color: #ffffff;
-            box-shadow: 0 2px 6px rgba(30, 58, 138, 0.35);
-        }
-
-        /* Main Container */
-        .main-container {
-            max-width: 900px;
-            margin: 0 auto 40px;
-            padding: 0 20px;
-            width: 100%;
-            flex: 1;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 16px;
+        .navbar-content {
+            max-width: 1100px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-        }
-
-        /* Stats Bar */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 14px;
-            text-align: center;
-        }
-
-        .stat-val {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-val.present-stat { color: var(--present); }
-        .stat-val.absent-stat { color: var(--absent); }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 4px;
-        }
-
-        /* Controls & Quick Actions */
-        .controls-row {
-            display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
+            gap: 16px;
         }
 
-        .date-badge {
-            font-size: 0.9rem;
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: -1px;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+        }
+
+        .brand-text h1 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1.2;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-text p {
+            font-size: 0.78rem;
             color: var(--text-muted);
-            background: #f1f5f9;
-            padding: 8px 14px;
-            border-radius: 6px;
             font-weight: 500;
         }
 
-        .btn-group {
-            display: flex;
-            gap: 8px;
+        /* Role Switcher Pills */
+        .role-switch-container {
+            display: inline-flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
         }
 
+        .role-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .role-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(30, 58, 138, 0.3);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            margin: 28px auto 40px;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        /* Hero / Header Card */
+        .header-card {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            border-radius: var(--radius-lg);
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 180px;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+
+        .header-card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .header-card p {
+            font-size: 0.88rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .header-badge-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .info-pill {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Metric / Statistic Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            padding: 18px 20px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .stat-val {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .stat-sub {
+            font-size: 0.78rem;
+            margin-top: 4px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .progress-bar-container {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary-light);
+            border-radius: 999px;
+            transition: width 0.4s ease;
+        }
+
+        /* Main Workspace Card */
+        .content-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .card-toolbar {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: #fafbfc;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 240px;
+            max-width: 380px;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 9px 14px 9px 36px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            outline: none;
+            background: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-wrapper input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .search-wrapper svg {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 16px;
+            height: 16px;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
         .btn {
             border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .btn-outline {
-            background: transparent;
+            background: #ffffff;
             border: 1px solid var(--border);
-            color: var(--text-dark);
+            color: var(--text-main);
         }
 
         .btn-outline:hover {
-            background: #f1f5f9;
+            background: #f8fafc;
+            border-color: #cbd5e1;
         }
 
-        .btn-save {
+        .btn-primary {
             background: var(--primary);
             color: #ffffff;
         }
 
-        .btn-save:hover {
-            background: var(--primary-hover);
+        .btn-primary:hover {
+            background: #1e40af;
         }
 
-        /* Tables */
+        .btn-success {
+            background: #059669;
+            color: #ffffff;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        /* Filters */
+        .filter-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .filter-pill {
+            border: 1px solid var(--border);
+            background: #ffffff;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .filter-pill.active {
+            background: #e0f2fe;
+            color: #0369a1;
+            border-color: #bae6fd;
+        }
+
+        /* Table */
         .table-responsive {
             overflow-x: auto;
         }
@@ -220,284 +417,539 @@
             border-collapse: collapse;
         }
 
-        th, td {
-            padding: 12px 14px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.92rem;
-        }
-
         th {
             background: #f8fafc;
-            color: #475569;
-            font-weight: 600;
-            text-transform: uppercase;
+            padding: 12px 24px;
+            text-align: left;
             font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
             letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
         }
 
         tr:hover td {
-            background-color: #f8fafc;
+            background-color: #fafbfc;
         }
 
-        /* Teacher Attendance Toggle Buttons */
-        .toggle-group {
-            display: inline-flex;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-            background: #f8fafc;
+        .student-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .toggle-btn {
-            border: none;
-            padding: 6px 14px;
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: #4338ca;
+            font-weight: 700;
             font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .roll-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        /* Toggle Button Group */
+        .attendance-switcher {
+            display: inline-flex;
+            background: #f1f5f9;
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .switch-btn {
+            border: none;
+            padding: 5px 14px;
+            font-size: 0.82rem;
             font-weight: 700;
             cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.15s ease;
             background: transparent;
             color: var(--text-muted);
-            transition: all 0.15s ease;
         }
 
-        .toggle-btn.btn-p.active {
-            background: var(--present);
+        .switch-btn.present-active {
+            background: var(--success);
             color: #ffffff;
+            box-shadow: 0 1px 4px rgba(16, 185, 129, 0.3);
         }
 
-        .toggle-btn.btn-a.active {
-            background: var(--absent);
+        .switch-btn.absent-active {
+            background: var(--danger);
             color: #ffffff;
+            box-shadow: 0 1px 4px rgba(239, 68, 68, 0.3);
         }
 
-        /* Student View Styles */
-        .student-search-box {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 10px 16px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            outline: none;
-        }
-
-        .search-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
-        }
-
-        .student-result-card {
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 24px;
-            display: none;
-        }
-
-        .student-result-card.active {
-            display: block;
-        }
-
-        .student-result-header {
-            display: flex;
-            justify-content: space-between;
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
             align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .badge {
-            display: inline-block;
+            gap: 6px;
             padding: 4px 12px;
-            border-radius: 9999px;
-            font-size: 0.85rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
             font-weight: 700;
-            text-align: center;
         }
 
         .badge-present {
-            background-color: var(--present-bg);
-            color: var(--present);
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1px solid #bbf7d0;
         }
 
         .badge-absent {
-            background-color: var(--absent-bg);
-            color: var(--absent);
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 1px solid #fecaca;
         }
 
+        /* Student Portal Personal Search Card */
+        .student-portal-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .student-query-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .student-profile-result {
+            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            margin-top: 18px;
+            display: none;
+        }
+
+        .student-profile-result.show {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast */
         .toast {
             position: fixed;
             bottom: 24px;
             right: 24px;
             background: #0f172a;
             color: #ffffff;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+            padding: 12px 22px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            font-size: 0.88rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(60px);
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            font-size: 0.9rem;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 999;
         }
 
         .toast.show {
-            opacity: 1;
             transform: translateY(0);
+            opacity: 1;
         }
 
-        .tab-content {
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            width: 100%;
+            max-width: 440px;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+            animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Tab switching */
+        .portal-view {
             display: none;
         }
 
-        .tab-content.active {
+        .portal-view.active {
             display: block;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+            background: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .role-switch-container {
+                width: 100%;
+            }
+            .role-btn {
+                flex: 1;
+                justify-content: center;
+            }
+            .card-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-wrapper {
+                max-width: 100%;
+            }
+            .toolbar-actions {
+                justify-content: flex-start;
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>SR University</h1>
-        <p>Department of Computer Science & Engineering | Attendance System</p>
-    </header>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="brand-section">
+                <div class="brand-logo">SR</div>
+                <div class="brand-text">
+                    <h1>SR UNIVERSITY</h1>
+                    <p>Department of Computer Science & Engineering</p>
+                </div>
+            </div>
 
-    <!-- Role Switcher -->
-    <div class="role-nav-container">
-        <div class="role-nav">
-            <button class="tab-btn active" onclick="switchPortal('teacher')">
-                <span>👩‍🏫 Teacher Portal (Mark)</span>
-            </button>
-            <button class="tab-btn" onclick="switchPortal('student')">
-                <span>🎓 Student Portal (View)</span>
-            </button>
+            <!-- Role Selector -->
+            <div class="role-switch-container">
+                <button class="role-btn active" id="btn-role-teacher" onclick="setRole('teacher')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
+                    Teacher Portal
+                </button>
+                <button class="role-btn" id="btn-role-student" onclick="setRole('student')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    Student Portal
+                </button>
+            </div>
         </div>
-    </div>
+    </nav>
 
-    <div class="main-container">
+    <!-- Main Container -->
+    <div class="container">
 
-        <!-- ================= TEACHER VIEW ================= -->
-        <div id="teacher-view" class="tab-content active">
-            <div class="card">
-                <div class="section-title">
-                    <span>Daily Attendance Sheet</span>
-                    <span class="date-badge" id="current-date-badge"></span>
+        <!-- Banner Info Card -->
+        <div class="header-card">
+            <div>
+                <h2 id="portal-heading">Instructor Attendance Console</h2>
+                <p id="portal-subheading">Mark, manage, and verify daily student attendance records</p>
+            </div>
+            <div class="header-badge-group">
+                <div class="info-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span id="current-date-text">Nov 19, 2026</span>
+                </div>
+                <div class="info-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>CSE - Year 3 (Section A)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TEACHER WORKSPACE ================= -->
+        <div id="teacher-portal" class="portal-view active">
+            <!-- Stat Cards -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Enrolled Students</span>
+                        <div class="stat-icon" style="background:#e0f2fe; color:#0284c7;">👥</div>
+                    </div>
+                    <div class="stat-val" id="stat-total">8</div>
+                    <div class="stat-sub">Active in this course section</div>
                 </div>
 
-                <!-- Live Statistics -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-val" id="total-students-count">0</div>
-                        <div class="stat-label">Total Students</div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Present</span>
+                        <div class="stat-icon" style="background:#dcfce7; color:#16a34a;">✓</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-val present-stat" id="total-present-count">0</div>
-                        <div class="stat-label">Present (P)</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val absent-stat" id="total-absent-count">0</div>
-                        <div class="stat-label">Absent (A)</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val" id="attendance-rate">0%</div>
-                        <div class="stat-label">Turnout Rate</div>
+                    <div class="stat-val" style="color: var(--success);" id="stat-present">6</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="stat-present-bar" style="background: var(--success); width: 75%;"></div>
                     </div>
                 </div>
 
-                <!-- Action Controls -->
-                <div class="controls-row">
-                    <div class="btn-group">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Absent</span>
+                        <div class="stat-icon" style="background:#fee2e2; color:#dc2626;">✕</div>
+                    </div>
+                    <div class="stat-val" style="color: var(--danger);" id="stat-absent">2</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="stat-absent-bar" style="background: var(--danger); width: 25%;"></div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Attendance Rate</span>
+                        <div class="stat-icon" style="background:#fef3c7; color:#d97706;">%</div>
+                    </div>
+                    <div class="stat-val" id="stat-rate">75%</div>
+                    <div class="stat-sub" id="stat-rate-sub">Good class turnout today</div>
+                </div>
+            </div>
+
+            <!-- Attendance Management Table -->
+            <div class="content-card">
+                <div class="card-toolbar">
+                    <div class="search-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="teacher-search" placeholder="Search by name or roll number..." oninput="handleTeacherSearch()" />
+                    </div>
+
+                    <div class="filter-group">
+                        <button class="filter-pill active" id="filter-all" onclick="setFilter('all')">All (<span id="count-filter-all">8</span>)</button>
+                        <button class="filter-pill" id="filter-p" onclick="setFilter('P')">Present (<span id="count-filter-p">6</span>)</button>
+                        <button class="filter-pill" id="filter-a" onclick="setFilter('A')">Absent (<span id="count-filter-a">2</span>)</button>
+                    </div>
+
+                    <div class="toolbar-actions">
                         <button class="btn btn-outline" onclick="markAll('P')">✓ Mark All Present</button>
                         <button class="btn btn-outline" onclick="markAll('A')">✕ Mark All Absent</button>
+                        <button class="btn btn-outline" onclick="openAddModal()">+ Add Student</button>
+                        <button class="btn btn-outline" onclick="exportCSV()">📥 Export CSV</button>
+                        <button class="btn btn-success" onclick="saveAttendance()">💾 Save & Publish</button>
                     </div>
-                    <button class="btn btn-save" onclick="saveAttendance()">💾 Save & Publish Attendance</button>
                 </div>
 
-                <!-- Teacher Table -->
                 <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
-                                <th>Roll No</th>
-                                <th>Student Name</th>
-                                <th style="text-align: center;">Mark Attendance (P/A)</th>
+                                <th>Roll Number</th>
+                                <th>Student Details</th>
+                                <th style="text-align: center;">Attendance Status (P / A)</th>
                             </tr>
                         </thead>
                         <tbody id="teacher-table-body">
-                            <!-- Populated dynamically -->
+                            <!-- Injected by JavaScript -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- ================= STUDENT VIEW ================= -->
-        <div id="student-view" class="tab-content">
-            <div class="card">
-                <div class="section-title">
-                    <span>Student Attendance Check</span>
-                </div>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
-                    Search your Roll Number or Name to inspect your attendance status.
-                </p>
+        <!-- ================= STUDENT WORKSPACE ================= -->
+        <div id="student-portal" class="portal-view">
+            <div class="student-portal-wrapper">
+                
+                <!-- Quick Student Lookup -->
+                <div class="student-query-card">
+                    <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;">Check Your Attendance Status</h3>
+                    <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+                        Enter your roll number or name to review your personal verification status for today's session.
+                    </p>
 
-                <!-- Student Search Bar -->
-                <div class="student-search-box">
-                    <input 
-                        type="text" 
-                        id="student-search-input" 
-                        class="search-input" 
-                        placeholder="Enter Roll Number (e.g., CS202601) or Name..." 
-                        oninput="searchStudent()"
-                    />
-                </div>
-
-                <!-- Individual Student Result View -->
-                <div id="student-card-result" class="student-result-card">
-                    <div class="student-result-header">
-                        <div>
-                            <h3 id="res-student-name" style="font-size: 1.2rem; color: var(--primary);"></h3>
-                            <span id="res-student-roll" style="color: var(--text-muted); font-size: 0.9rem;"></span>
-                        </div>
-                        <div id="res-student-status"></div>
+                    <div class="search-wrapper" style="max-width: 100%;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="student-lookup-input" placeholder="Type Roll Number (e.g., CS202601) or Your Name..." oninput="handleStudentLookup()" />
                     </div>
-                    <p style="font-size: 0.85rem; color: #475569;" id="res-student-message"></p>
+
+                    <!-- Individual Result Card -->
+                    <div id="student-card-details" class="student-profile-result">
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <div class="avatar" id="res-avatar" style="width: 48px; height: 48px; font-size: 1.1rem;">AS</div>
+                            <div>
+                                <h4 id="res-name" style="font-size: 1.15rem; font-weight: 700; color: var(--text-main);">Aarav Sharma</h4>
+                                <div style="display: flex; gap: 8px; margin-top: 4px; align-items: center;">
+                                    <span class="roll-badge" id="res-roll">CS202601</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">CSE Dept • Semester V</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: right;">
+                            <div id="res-badge-container"></div>
+                            <div id="res-note" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">
+                                Record published by course faculty
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Read-Only Complete Class Table for Students -->
-                <div class="section-title" style="margin-top: 24px; font-size: 1.1rem;">
-                    <span>Class Attendance List</span>
+                <!-- Complete Student Directory View -->
+                <div class="content-card">
+                    <div class="card-toolbar">
+                        <div>
+                            <h3 style="font-size: 1.05rem; font-weight: 700;">Class-wide Attendance Roster</h3>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">Official student list for today's session</p>
+                        </div>
+                        <div class="search-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="student-roster-search" placeholder="Filter class list..." oninput="handleRosterSearch()" />
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Roll Number</th>
+                                    <th>Student Name</th>
+                                    <th style="text-align: center;">Verified Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-roster-body">
+                                <!-- Injected by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Roll No</th>
-                                <th>Student Name</th>
-                                <th style="text-align: center;">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="student-table-body">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
+
             </div>
         </div>
 
     </div>
 
-    <!-- Notification Toast -->
-    <div id="toast" class="toast">Attendance saved successfully!</div>
+    <!-- Add Student Modal -->
+    <div id="add-modal" class="modal-overlay">
+        <div class="modal">
+            <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px;">Add New Student</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">Enter the student's credentials to include them in the roster.</p>
 
+            <div class="form-group">
+                <label class="form-label">Roll Number</label>
+                <input type="text" id="new-roll" class="form-control" placeholder="e.g., CS202609" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Student Full Name</label>
+                <input type="text" id="new-name" class="form-control" placeholder="e.g., Rohan Deshmukh" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Initial Attendance</label>
+                <select id="new-status" class="form-control">
+                    <option value="P">Present (P)</option>
+                    <option value="A">Absent (A)</option>
+                </select>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+                <button class="btn btn-outline" onclick="closeAddModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmAddStudent()">Add Student</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span id="toast-text">Attendance saved and published!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 SR University • Smart Campus Attendance System • Department of Computer Science & Engineering</p>
+    </footer>
+
+    <!-- Logic Script -->
     <script>
-        // Initial Dataset
-        const DEFAULT_STUDENTS = [
+        const STORAGE_KEY = 'sr_university_attendance_v2';
+
+        const INITIAL_STUDENTS = [
             { roll: 'CS202601', name: 'Aarav Sharma', status: 'P' },
             { roll: 'CS202602', name: 'Aditi Verma', status: 'P' },
             { roll: 'CS202603', name: 'Bhavya Patel', status: 'A' },
@@ -508,91 +960,198 @@
             { roll: 'CS202608', name: 'Manish Gupta', status: 'P' }
         ];
 
-        const STORAGE_KEY = 'sr_university_attendance';
+        let students = [];
+        let currentFilter = 'all';
 
-        // Load or initialize students
-        function getStudents() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : DEFAULT_STUDENTS;
+        // Load data from localStorage or initial state
+        function initData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            students = stored ? JSON.parse(stored) : [...INITIAL_STUDENTS];
         }
 
-        let students = getStudents();
+        // Generate initials for avatar
+        function getInitials(name) {
+            return name
+                .split(' ')
+                .map(part => part[0])
+                .join('')
+                .toUpperCase()
+                .substring(0, 2);
+        }
 
-        // Initialize UI on load
-        window.addEventListener('DOMContentLoaded', () => {
-            const dateStr = new Date().toLocaleDateString('en-US', {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-            document.getElementById('current-date-badge').textContent = 'Date: ' + dateStr;
-            renderTeacherTable();
-            renderStudentTable();
-            updateStatistics();
-        });
+        // Switch between Teacher and Student Portals
+        function setRole(role) {
+            const btnTeacher = document.getElementById('btn-role-teacher');
+            const btnStudent = document.getElementById('btn-role-student');
+            const portalTeacher = document.getElementById('teacher-portal');
+            const portalStudent = document.getElementById('student-portal');
+            const heading = document.getElementById('portal-heading');
+            const subheading = document.getElementById('portal-subheading');
 
-        // Switch Portals
-        function switchPortal(portal) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-            if (portal === 'teacher') {
-                document.querySelectorAll('.tab-btn')[0].classList.add('active');
-                document.getElementById('teacher-view').classList.add('active');
+            if (role === 'teacher') {
+                btnTeacher.classList.add('active');
+                btnStudent.classList.remove('active');
+                portalTeacher.classList.add('active');
+                portalStudent.classList.remove('active');
+                heading.textContent = 'Instructor Attendance Console';
+                subheading.textContent = 'Mark, manage, and verify daily student attendance records';
                 renderTeacherTable();
             } else {
-                document.querySelectorAll('.tab-btn')[1].classList.add('active');
-                document.getElementById('student-view').classList.add('active');
-                renderStudentTable();
+                btnStudent.classList.add('active');
+                btnTeacher.classList.remove('active');
+                portalStudent.classList.add('active');
+                portalTeacher.classList.remove('active');
+                heading.textContent = 'Student Attendance Portal';
+                subheading.textContent = 'Search your roll number to view your verified attendance records';
+                renderStudentRoster();
             }
         }
 
-        // Render Teacher Editable Table
+        // Render Teacher Attendance Table
         function renderTeacherTable() {
             const tbody = document.getElementById('teacher-table-body');
+            const search = (document.getElementById('teacher-search').value || '').toLowerCase().trim();
+
+            let filtered = students.filter(s => {
+                const matchesSearch = s.roll.toLowerCase().includes(search) || s.name.toLowerCase().includes(search);
+                if (!matchesSearch) return false;
+                if (currentFilter === 'all') return true;
+                return s.status === currentFilter;
+            });
+
             tbody.innerHTML = '';
 
-            students.forEach((s, idx) => {
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 30px; color: var(--text-muted);">No students found matching current filters.</td></tr>`;
+                updateStats();
+                return;
+            }
+
+            filtered.forEach((s) => {
+                const originalIndex = students.findIndex(item => item.roll === s.roll);
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><strong>${s.roll}</strong></td>
-                    <td>${s.name}</td>
+                    <td><span class="roll-badge">${s.roll}</span></td>
+                    <td>
+                        <div class="student-cell">
+                            <div class="avatar">${getInitials(s.name)}</div>
+                            <div>
+                                <div style="font-weight: 600; color: var(--text-main);">${s.name}</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted);">B.Tech Computer Science</div>
+                            </div>
+                        </div>
+                    </td>
                     <td style="text-align: center;">
-                        <div class="toggle-group">
-                            <button class="toggle-btn btn-p ${s.status === 'P' ? 'active' : ''}" onclick="setStatus(${idx}, 'P')">P</button>
-                            <button class="toggle-btn btn-a ${s.status === 'A' ? 'active' : ''}" onclick="setStatus(${idx}, 'A')">A</button>
+                        <div class="attendance-switcher">
+                            <button class="switch-btn ${s.status === 'P' ? 'present-active' : ''}" onclick="toggleStatus(${originalIndex}, 'P')">
+                                Present (P)
+                            </button>
+                            <button class="switch-btn ${s.status === 'A' ? 'absent-active' : ''}" onclick="toggleStatus(${originalIndex}, 'A')">
+                                Absent (A)
+                            </button>
                         </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
-            updateStatistics();
+
+            updateStats();
         }
 
-        // Render Student Read-Only Table
-        function renderStudentTable(filterQuery = '') {
-            const tbody = document.getElementById('student-table-body');
-            tbody.innerHTML = '';
+        // Update statistics cards
+        function updateStats() {
+            const total = students.length;
+            const present = students.filter(s => s.status === 'P').length;
+            const absent = total - present;
+            const rate = total > 0 ? Math.round((present / total) * 100) : 0;
+
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-present').textContent = present;
+            document.getElementById('stat-absent').textContent = absent;
+            document.getElementById('stat-rate').textContent = rate + '%';
+
+            document.getElementById('stat-present-bar').style.width = (total > 0 ? (present / total) * 100 : 0) + '%';
+            document.getElementById('stat-absent-bar').style.width = (total > 0 ? (absent / total) * 100 : 0) + '%';
+
+            document.getElementById('count-filter-all').textContent = total;
+            document.getElementById('count-filter-p').textContent = present;
+            document.getElementById('count-filter-a').textContent = absent;
+
+            const sub = document.getElementById('stat-rate-sub');
+            if (rate >= 75) {
+                sub.textContent = 'Excellent turnout (above target)';
+                sub.style.color = 'var(--success)';
+            } else {
+                sub.textContent = 'Turnout below 75% target';
+                sub.style.color = 'var(--danger)';
+            }
+        }
+
+        // Set Filter for Teacher Table
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.getElementById('filter-all').classList.toggle('active', filter === 'all');
+            document.getElementById('filter-p').classList.toggle('active', filter === 'P');
+            document.getElementById('filter-a').classList.toggle('active', filter === 'A');
+            renderTeacherTable();
+        }
+
+        // Toggle Status
+        function toggleStatus(index, status) {
+            students[index].status = status;
+            renderTeacherTable();
+        }
+
+        // Mark All
+        function markAll(status) {
+            students.forEach(s => s.status = status);
+            renderTeacherTable();
+            showToast(`Marked all ${students.length} students as ${status === 'P' ? 'Present' : 'Absent'}`);
+        }
+
+        // Save Attendance
+        function saveAttendance() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+            renderStudentRoster();
+            showToast('Attendance records saved and published successfully!');
+        }
+
+        // Search in Teacher View
+        function handleTeacherSearch() {
+            renderTeacherTable();
+        }
+
+        // Render Student Roster
+        function renderStudentRoster() {
+            const tbody = document.getElementById('student-roster-body');
+            const search = (document.getElementById('student-roster-search').value || '').toLowerCase().trim();
 
             const filtered = students.filter(s => 
-                s.roll.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                s.name.toLowerCase().includes(filterQuery.toLowerCase())
+                s.roll.toLowerCase().includes(search) || 
+                s.name.toLowerCase().includes(search)
             );
 
+            tbody.innerHTML = '';
+
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted);">No student matches your search.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 24px; color: var(--text-muted);">No student matches this search.</td></tr>`;
                 return;
             }
 
             filtered.forEach(s => {
                 const tr = document.createElement('tr');
+                const isPresent = s.status === 'P';
                 tr.innerHTML = `
-                    <td><strong>${s.roll}</strong></td>
-                    <td>${s.name}</td>
+                    <td><span class="roll-badge">${s.roll}</span></td>
+                    <td>
+                        <div class="student-cell">
+                            <div class="avatar">${getInitials(s.name)}</div>
+                            <span style="font-weight: 600;">${s.name}</span>
+                        </div>
+                    </td>
                     <td style="text-align: center;">
-                        <span class="badge ${s.status === 'P' ? 'badge-present' : 'badge-absent'}">
-                            ${s.status === 'P' ? 'Present (P)' : 'Absent (A)'}
+                        <span class="status-badge ${isPresent ? 'badge-present' : 'badge-absent'}">
+                            ${isPresent ? '✓ Present (P)' : '✕ Absent (A)'}
                         </span>
                     </td>
                 `;
@@ -600,84 +1159,120 @@
             });
         }
 
-        // Set attendance for an individual student
-        function setStatus(index, status) {
-            students[index].status = status;
-            renderTeacherTable();
+        // Filter Roster in Student View
+        function handleRosterSearch() {
+            renderStudentRoster();
         }
 
-        // Mark all Present or Absent
-        function markAll(status) {
-            students.forEach(s => s.status = status);
-            renderTeacherTable();
-            showToast(`Marked all as ${status === 'P' ? 'Present' : 'Absent'}`);
-        }
-
-        // Save Attendance to LocalStorage
-        function saveAttendance() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
-            renderStudentTable();
-            showToast('Attendance recorded and published successfully!');
-        }
-
-        // Update Statistics
-        function updateStatistics() {
-            const total = students.length;
-            const present = students.filter(s => s.status === 'P').length;
-            const absent = total - present;
-            const percentage = total > 0 ? Math.round((present / total) * 100) : 0;
-
-            document.getElementById('total-students-count').textContent = total;
-            document.getElementById('total-present-count').textContent = present;
-            document.getElementById('total-absent-count').textContent = absent;
-            document.getElementById('attendance-rate').textContent = percentage + '%';
-        }
-
-        // Search Student Feature for the Student Portal
-        function searchStudent() {
-            const query = document.getElementById('student-search-input').value.trim();
-            const resultCard = document.getElementById('student-card-result');
-
-            renderStudentTable(query);
+        // Student Personal Lookup
+        function handleStudentLookup() {
+            const query = (document.getElementById('student-lookup-input').value || '').trim().toLowerCase();
+            const card = document.getElementById('student-card-details');
 
             if (!query) {
-                resultCard.classList.remove('active');
+                card.classList.remove('show');
                 return;
             }
 
-            const match = students.find(s => 
-                s.roll.toLowerCase() === query.toLowerCase() ||
-                s.name.toLowerCase() === query.toLowerCase()
+            const found = students.find(s => 
+                s.roll.toLowerCase() === query || 
+                s.name.toLowerCase() === query
             );
 
-            if (match) {
-                resultCard.classList.add('active');
-                document.getElementById('res-student-name').textContent = match.name;
-                document.getElementById('res-student-roll').textContent = 'Roll No: ' + match.roll;
+            if (found) {
+                card.classList.add('show');
+                document.getElementById('res-avatar').textContent = getInitials(found.name);
+                document.getElementById('res-name').textContent = found.name;
+                document.getElementById('res-roll').textContent = found.roll;
                 
-                const isPresent = match.status === 'P';
-                document.getElementById('res-student-status').innerHTML = `
-                    <span class="badge ${isPresent ? 'badge-present' : 'badge-absent'}" style="font-size: 1rem; padding: 6px 16px;">
-                        ${isPresent ? 'Present (P)' : 'Absent (A)'}
+                const isPresent = found.status === 'P';
+                document.getElementById('res-badge-container').innerHTML = `
+                    <span class="status-badge ${isPresent ? 'badge-present' : 'badge-absent'}" style="font-size: 0.95rem; padding: 6px 16px;">
+                        ${isPresent ? '✓ Present (P)' : '✕ Absent (A)'}
                     </span>
                 `;
-                document.getElementById('res-student-message').textContent = isPresent
-                    ? 'Status: Marked present for today\'s session.'
-                    : 'Status: Marked absent for today\'s session. Please consult your course instructor if needed.';
+                document.getElementById('res-note').textContent = isPresent
+                    ? 'Verified: You have been marked Present today.'
+                    : 'Notice: You have been marked Absent today.';
             } else {
-                resultCard.classList.remove('active');
+                card.classList.remove('show');
             }
+        }
+
+        // Add Student Modal Functions
+        function openAddModal() {
+            document.getElementById('add-modal').classList.add('open');
+            document.getElementById('new-roll').value = 'CS2026' + String(students.length + 1).padStart(2, '0');
+            document.getElementById('new-name').value = '';
+            document.getElementById('new-name').focus();
+        }
+
+        function closeAddModal() {
+            document.getElementById('add-modal').classList.remove('open');
+        }
+
+        function confirmAddStudent() {
+            const roll = document.getElementById('new-roll').value.trim();
+            const name = document.getElementById('new-name').value.trim();
+            const status = document.getElementById('new-status').value;
+
+            if (!roll || !name) {
+                alert('Please provide both roll number and name.');
+                return;
+            }
+
+            if (students.some(s => s.roll.toLowerCase() === roll.toLowerCase())) {
+                alert('A student with this Roll Number already exists.');
+                return;
+            }
+
+            students.push({ roll, name, status });
+            saveAttendance();
+            renderTeacherTable();
+            closeAddModal();
+            showToast(`Added ${name} (${roll}) to roster.`);
+        }
+
+        // Export to CSV
+        function exportCSV() {
+            let csv = 'Roll Number,Student Name,Attendance Status\n';
+            students.forEach(s => {
+                csv += `"${s.roll}","${s.name}","${s.status === 'P' ? 'Present' : 'Absent'}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `SR_University_Attendance_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('Exported attendance as CSV!');
         }
 
         // Toast feedback
         function showToast(msg) {
             const toast = document.getElementById('toast');
-            toast.textContent = msg;
+            document.getElementById('toast-text').textContent = msg;
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 2500);
         }
+
+        // Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            document.getElementById('current-date-text').textContent = today;
+            initData();
+            renderTeacherTable();
+            renderStudentRoster();
+        });
     </script>
 </body>
 </html>
